@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "hugging4all"
+version = "0.1.0"
+description = ""
+authors = ["Omar U. Espejel <espejelomar@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.30.0"
+pyyaml = "^6.0"
+termcolor = "^2.3.0"
+emoji = "^2.5.0"
+transformers = "^4.30.1"
+torch = "^2.0.1"
+langchain = "^0.0.209"
+jsonlines = "^3.1.0"
+tiktoken = "^0.4.0"
+openai = "^0.27.8"
+cohere = "^4.11.2"
+chromadb = "^0.3.26"
+rich = "^13.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
