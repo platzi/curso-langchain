@@ -21,29 +21,6 @@ PROMPT_TEMPLATE_CHAT = PromptTemplate(
 )
 
 
-def select_embedding_provider(provider: str, model: str):
-    """
-    Selecciona el proveedor de embeddings para el chatbot.
-
-    Args:
-        provider (str): El proveedor de embeddings. 'openai' o 'cohere'.
-        model (str): El modelo a usar para los embeddings.
-
-    Returns:
-        El objeto embeddings del proveedor seleccionado.
-    """
-    if provider.lower() == "openai":
-        get_openai_api_key()
-        return OpenAIEmbeddings(model=model)
-    elif provider.lower() == "cohere":
-        get_cohere_api_key()
-        return CohereEmbeddings(model=model)
-    else:
-        raise ValueError(
-            f"Proveedor de embedding no compatible: {provider}. Los proveedores admitidos son 'OpenAI' y 'Cohere'."
-        )
-
-
 def load_documents(file_path: str) -> List[Dict]:
     """
     Carga los documentos desde un archivo JSONL y los divide en trozos.
@@ -65,6 +42,29 @@ def load_documents(file_path: str) -> List[Dict]:
     )
 
     return text_splitter.split_documents(data)
+
+
+def select_embedding_provider(provider: str, model: str):
+    """
+    Selecciona el proveedor de embeddings para el chatbot.
+
+    Args:
+        provider (str): El proveedor de embeddings. 'openai' o 'cohere'.
+        model (str): El modelo a usar para los embeddings.
+
+    Returns:
+        El objeto embeddings del proveedor seleccionado.
+    """
+    if provider.lower() == "openai":
+        get_openai_api_key()
+        return OpenAIEmbeddings(model=model)
+    elif provider.lower() == "cohere":
+        get_cohere_api_key()
+        return CohereEmbeddings(model=model)
+    else:
+        raise ValueError(
+            f"Proveedor de embedding no compatible: {provider}. Los proveedores admitidos son 'OpenAI' y 'Cohere'."
+        )
 
 
 def get_chroma_db(embeddings, documents, path):
