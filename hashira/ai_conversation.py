@@ -8,14 +8,8 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from rich.console import Console
-from utils import (
-    TransformersDocsJSONLLoader,
-    get_cohere_api_key,
-    get_file_path,
-    get_openai_api_key,
-    get_query_from_user,
-    load_config,
-)
+from utils import (DocsJSONLLoader, get_cohere_api_key, get_file_path,
+                   get_openai_api_key, get_query_from_user, load_config)
 
 console = Console()
 
@@ -28,6 +22,16 @@ PROMPT_TEMPLATE_CHAT = PromptTemplate(
 
 
 def select_embedding_provider(provider: str, model: str):
+    """
+    Selecciona el proveedor de embeddings para el chatbot.
+
+    Args:
+        provider (str): El proveedor de embeddings. 'openai' o 'cohere'.
+        model (str): El modelo a usar para los embeddings.
+
+    Returns:
+        El objeto embeddings del proveedor seleccionado.
+    """
     if provider.lower() == "openai":
         get_openai_api_key()
         return OpenAIEmbeddings(model=model)
@@ -41,8 +45,17 @@ def select_embedding_provider(provider: str, model: str):
 
 
 def load_documents(file_path: str) -> List[Dict]:
+    """
+    Carga los documentos desde un archivo JSONL y los divide en trozos.
+
+    Args:
+        file_path (str): Ruta al archivo JSONL.
+
+    Returns:
+        Los documentos cargados y divididos en trozos.
+    """
     config = load_config()
-    loader = TransformersDocsJSONLLoader(file_path)
+    loader = DocsJSONLLoader(file_path)
     data = loader.load()
 
     text_splitter = RecursiveCharacterTextSplitter(
@@ -55,6 +68,17 @@ def load_documents(file_path: str) -> List[Dict]:
 
 
 def get_chroma_db(embeddings, documents, path):
+    """
+    Obtiene la base de datos Chroma. Crea una nueva o carga una existente.
+
+    Args:
+        embeddings: El objeto embeddings a usar.
+        documents: Los documentos a indexar en la base de datos.
+        path: La ruta a la base de datos Chroma.
+
+    Returns:
+        El objeto de la base de datos Chroma.
+    """
     config = load_config()
     if config["recreate_chroma_db"]:
         console.print("Recreando Chroma DB...")
@@ -69,6 +93,16 @@ def get_chroma_db(embeddings, documents, path):
 
 
 def process_query(query: str, vectorstore) -> str:
+    """
+    Procesa una consulta del usuario y genera una respuesta del chatbot.
+
+    Args:
+        query (str): La consulta del usuario.
+        vectorstore: La base de datos de vectores donde buscar la respuesta.
+
+    Returns:
+        La respuesta generada por el chatbot.
+    """
     config = load_config()
     retriever = vectorstore.as_retriever(
         search_kwargs={"k": config["document_retrieval"]["k"]}
@@ -94,6 +128,12 @@ def process_query(query: str, vectorstore) -> str:
 
 
 def run_conversation(vectorstore_chroma):
+    """
+    Inicia una conversación con el usuario.
+
+    Args:
+        vectorstore_chroma: La base de datos de vectores donde buscar las respuestas.
+    """
     conversation_history = []
 
     console.print(
@@ -117,6 +157,9 @@ def run_conversation(vectorstore_chroma):
 
 
 def main():
+    """
+    Función principal que se ejecuta cuando se inicia el script.
+    """
     config = load_config()
 
     embeddings = select_embedding_provider(

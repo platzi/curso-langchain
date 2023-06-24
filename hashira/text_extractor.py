@@ -12,16 +12,37 @@ from utils import load_config
 
 
 def create_dir(path: str) -> None:
+    """
+    Crea un directorio si no existe.
+
+    Args:
+        path (str): Ruta del directorio a crear.
+    """
     if not os.path.exists(path):
         os.makedirs(path)
 
 
 def remove_existing_file(file_path: str) -> None:
+    """
+    Elimina un archivo si existe.
+
+    Args:
+        file_path (str): Ruta del archivo a eliminar.
+    """
     if os.path.exists(file_path):
         os.remove(file_path)
 
 
 def preprocess_text(text: str) -> str:
+    """
+    Preprocesa el texto eliminando ciertos patrones y caracteres.
+
+    Args:
+        text (str): Texto a preprocesar.
+
+    Returns:
+        El texto preprocesado.
+    """
     text = re.sub(r"<[^>]*>", "", text)
     text = re.sub(r"http\S+|www.\S+", "", text)
     text = re.sub(r"Copyright.*", "", text)
@@ -32,6 +53,14 @@ def preprocess_text(text: str) -> str:
 
 
 def download_file(url: str, repo_info: dict, jsonl_file_name: str) -> None:
+    """
+    Descarga un archivo desde una URL y lo guarda en un archivo JSONL.
+
+    Args:
+        url (str): URL desde donde se descarga el archivo.
+        repo_info (dict): Información sobre el repositorio desde donde se descarga el archivo.
+        jsonl_file_name (str): Nombre del archivo JSONL donde se guarda el archivo descargado.
+    """
     response = requests.get(url)
     filename = url.split("/")[-1]
     text = response.text
@@ -60,6 +89,15 @@ def process_directory(
     headers: Dict,
     jsonl_file_name: str,
 ) -> None:
+    """
+    Procesa un directorio de un repositorio de GitHub y descarga los archivos en él.
+
+    Args:
+        path (str): Ruta del directorio a procesar.
+        repo_info (Dict): Información sobre el repositorio que contiene el directorio.
+        headers (Dict): Headers para la petición a la API de GitHub.
+        jsonl_file_name (str): Nombre del archivo JSONL donde se guardarán los archivos descargados.
+    """
     base_url = f"https://api.github.com/repos/{repo_info['owner']}/{repo_info['repo']}/contents/"
     print(
         colored(f"Procesando directorio: {path} del repo: {repo_info['repo']}", "blue")
@@ -97,6 +135,9 @@ def process_directory(
 
 
 def main():
+    """
+    Función principal que se ejecuta cuando se inicia el script.
+    """
     config = load_config()
     github_token = os.getenv("GITHUB_TOKEN")
 
