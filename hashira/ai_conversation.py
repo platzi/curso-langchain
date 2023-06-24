@@ -101,7 +101,7 @@ def run_conversation(vectorstore_chroma):
     )
 
     while True:
-        console.print("\n[blue]You:[/blue]")
+        console.print("\n[blue]Tú:[/blue]")
         query = get_query_from_user()
 
         if query.lower() == "salir":

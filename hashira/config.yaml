@@ -32,7 +32,7 @@ jsonl_database_path: data/docs_en_2023_06_23.jsonl
 recreate_chroma_db: false
 embeddings_provider: openai # puede ser "cohere"
 embeddings_model: text-embedding-ada-002 # con cohere puede ser "embed-multilingual-v2.0"
-chroma_db_name: huggingface_docs_chroma
+chroma_db_name: chroma_docs
 
 chat_model:
   model_name: gpt-3.5-turbo
@@ -47,4 +47,4 @@ document_retrieval:
   k: 5
 
 conversation_chain:
-  verbose: true
+  verbose: false
