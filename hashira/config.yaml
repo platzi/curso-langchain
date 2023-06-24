@@ -20,9 +20,6 @@ github:
       repo: blog
       path: /
 
-summarizer_model: facebook/bart-large-cnn
-# Other alternatives: "sshleifer/distilbart-cnn-12-6", "sshleifer/distilbart-xsum-12-3"
-resulting_jsonl_file: []
 jsonl_database_path: data/docs_en_2023_06_23.jsonl
 
 # =================================================
