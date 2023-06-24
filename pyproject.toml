@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "hugging4all"
+name = "hashira"
 version = "0.1.0"
 description = ""
 authors = ["Omar U. Espejel <espejelomar@gmail.com>"]

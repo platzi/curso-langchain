@@ -1,0 +1,50 @@
+# =================================================
+# Configuración para text_extractor.py
+# =================================================
+
+github:
+  repos:
+    - owner: huggingface
+      repo: transformers
+      path: docs/source/en
+
+    - owner: huggingface
+      repo: peft
+      path: docs/source
+
+    - owner: huggingface
+      repo: accelerate
+      path: docs/source
+
+    - owner: huggingface
+      repo: blog
+      path: /
+
+summarizer_model: facebook/bart-large-cnn
+# Other alternatives: "sshleifer/distilbart-cnn-12-6", "sshleifer/distilbart-xsum-12-3"
+resulting_jsonl_file: []
+jsonl_database_path: data/docs_en_2023_06_23.jsonl
+
+# =================================================
+# Configuración para ai_conversation.py
+# =================================================
+
+recreate_chroma_db: false
+embeddings_provider: openai # puede ser "cohere"
+embeddings_model: text-embedding-ada-002 # con cohere puede ser "embed-multilingual-v2.0"
+chroma_db_name: huggingface_docs_chroma
+
+chat_model:
+  model_name: gpt-3.5-turbo
+  temperature: 0.9
+  max_tokens: 256
+
+text_splitting:
+  chunk_size: 500
+  chunk_overlap: 50
+
+document_retrieval:
+  k: 5
+
+conversation_chain:
+  verbose: true

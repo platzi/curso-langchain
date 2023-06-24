@@ -38,7 +38,7 @@ poetry install
 Luego, puede ejecutar el proyecto con:
 
 ``` shell
-poetry run python hugging4all/ai_conversation.py
+poetry run python hashira/ai_conversation.py
 ```
 
 ## **Configuración**
