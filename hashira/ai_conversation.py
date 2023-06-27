@@ -43,7 +43,7 @@ def load_documents(file_path: str) -> List[Dict]:
 
     return text_splitter.split_documents(data)
 
-
+# TODO: Implementar uso de embeddings de Cohere.
 def select_embedding_provider(provider: str, model: str):
     """
     Selecciona el proveedor de embeddings para el chatbot.
