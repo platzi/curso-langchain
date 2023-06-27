@@ -41,7 +41,7 @@ chat_model:
   max_tokens: 256
 
 text_splitting:
-  chunk_size: 500
+  chunk_size: 1600
   chunk_overlap: 50
 
 document_retrieval:
