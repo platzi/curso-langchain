@@ -137,7 +137,7 @@ def run_conversation(vectorstore_chroma):
     conversation_history = []
 
     console.print(
-        "\n[blue]IA:[/blue] Hola! Cuál es tu nombre? Qué quieres preguntarme?"
+        "\n[blue]IA:[/blue] Hola 🚀! Qué quieres preguntarme sobre Transformers e inteligencia artificial en general?"
     )
 
     while True:
