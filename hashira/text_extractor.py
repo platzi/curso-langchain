@@ -100,8 +100,12 @@ def process_directory(
     """
     # Si el nombre del directorio es 'zh', lo omite y retorna inmediatamente.
     # Esta característica está implementada para no descargar las traducciones en chino.
-    if os.path.basename(path) == 'zh':
-        print(colored(f"Se omite el directorio 'zh' (traducciones en chino): {path}", "yellow"))
+    if os.path.basename(path) == "zh":
+        print(
+            colored(
+                f"Se omite el directorio 'zh' (traducciones en chino): {path}", "yellow"
+            )
+        )
         return
 
     base_url = f"https://api.github.com/repos/{repo_info['owner']}/{repo_info['repo']}/contents/"
@@ -138,7 +142,6 @@ def process_directory(
                 "red",
             )
         )
-
 
 
 def main():
