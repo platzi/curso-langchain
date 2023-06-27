@@ -20,11 +20,7 @@ github:
       repo: accelerate
       path: docs/source
 
-    - owner: huggingface
-      repo: blog
-      path: /
-
-jsonl_database_path: data/docs_en_2023_06_23.jsonl
+jsonl_database_path: data/docs_en_2023_06_24.jsonl
 
 # =================================================
 # Configuración para ai_conversation.py
