@@ -17,7 +17,6 @@ langchain = "^0.0.209"
 jsonlines = "^3.1.0"
 tiktoken = "^0.4.0"
 openai = "^0.27.8"
-cohere = "^4.11.2"
 chromadb = "^0.3.26"
 rich = "^13.4.2"
 
