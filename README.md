@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="images/hashira_cactus.png" width="300" height="300">
+</p>
+
+
 # HASHIRA: Sensei virtual de documentación
 
 ## **Descripción**
