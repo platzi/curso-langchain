@@ -175,10 +175,6 @@ def main():
             jsonl_file_name,
         )
 
-    with tarfile.open(f"data/docs_en_{current_date}.tar", "w") as tar:
-        tar.add(jsonl_file_name)
-        print(colored("Comprimió con éxito el archivo JSONL.", "green"))
-
 
 if __name__ == "__main__":
     main()
