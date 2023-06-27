@@ -98,6 +98,12 @@ def process_directory(
         headers (Dict): Headers para la petición a la API de GitHub.
         jsonl_file_name (str): Nombre del archivo JSONL donde se guardarán los archivos descargados.
     """
+    # Si el nombre del directorio es 'zh', lo omite y retorna inmediatamente.
+    # Esta característica está implementada para no descargar las traducciones en chino.
+    if os.path.basename(path) == 'zh':
+        print(colored(f"Se omite el directorio 'zh' (traducciones en chino): {path}", "yellow"))
+        return
+
     base_url = f"https://api.github.com/repos/{repo_info['owner']}/{repo_info['repo']}/contents/"
     print(
         colored(f"Procesando directorio: {path} del repo: {repo_info['repo']}", "blue")
@@ -132,6 +138,7 @@ def process_directory(
                 "red",
             )
         )
+
 
 
 def main():
