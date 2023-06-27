@@ -27,7 +27,9 @@ Este proyecto requiere las siguientes dependencias:
 - rich = "^13.4.2"
 ```
 
-## **Instalación**
+## Instalación de dependencias
+
+### **Instalación con Poetry (recomendada)**
 
 Puede instalar las dependencias y crear un entorno virtual utilizando Poetry con el siguiente comando:
 
@@ -40,6 +42,49 @@ Luego, puede ejecutar el proyecto con:
 ``` shell
 poetry run python hashira/ai_conversation.py
 ```
+
+
+### **Instalación con Pip**
+
+Como alternativa, también puede instalar las dependencias utilizando Pip con el siguiente comando:
+
+``` shell
+pip install -r requirements.txt
+```
+
+Luego, puede ejecutar el proyecto con:
+
+``` shell
+python hashira/ai_conversation.py
+```
+
+### **Instalación con Conda**
+
+Además, puede optar por utilizar Conda para la instalación. Primero, cree un nuevo entorno con Conda:
+
+``` shell
+conda create --name myenv
+```
+
+Luego, active el entorno:
+
+``` shell
+conda activate myenv
+```
+
+A continuación, instale las dependencias:
+
+``` shell
+conda install --file requirements.txt
+```
+
+Por último, ejecute el proyecto con:
+
+``` shell
+python hashira/ai_conversation.py
+```
+
+Recuerde reemplazar "myenv" con el nombre que desee para su entorno.
 
 ## **Configuración**
 El funcionamiento del proyecto se puede manipular mediante el archivo **`config.yaml`**.
