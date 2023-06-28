@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import re
-import tarfile
 from typing import Dict
 
 import emoji
