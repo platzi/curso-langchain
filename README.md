@@ -2,7 +2,6 @@
   <img src="images/hashira_cactus.png" width="300" height="300">
 </p>
 
-
 # HASHIRA: Sensei virtual de documentación
 
 ## **Descripción**
@@ -19,7 +18,8 @@ El funcionamiento del proyecto se puede manipular mediante el archivo **`config.
 2. **Recreación de la base de datos de Chroma**: Ajuste la variable **`recreate_chroma_db`** en **`config.yaml`** a **`true`**. Esto indica que se creará una nueva base de datos de vectores Chroma y se almacenará localmente con el nombre "chroma_docs".
 3. **Incrustación y almacenamiento de documentos**: Ejecute **`hashira/ai_conversation.py`**. Este script cargará el archivo jsonl creado en el paso 1 (asegúrese de agregar su nombre al archivo **`config.yaml`** en la variable **`jsonl_database_path`**). Luego, recreará la base de datos de Chroma incrustando todos los archivos json en el archivo jsonl creado, dividiéndolos y almacenándolos en la base de datos de vectores de Chroma para crear un índice.
 4. **Uso de la base de datos existente**: Una vez que la base de datos de Chroma ha sido recreada, no es necesario volver a hacerlo. En la configuración, la variable **`recreate_chroma_db`** puede ajustarse a **`false`**, de modo que se utilizará la base de datos de Chroma existente en lugar de crear una nueva que implique volver a incrustar todos los archivos.
-5. **Interacción con los documentos**: Al ejecutar **`hashira/conversation_ai.py`**, podrás chatear con todos los documentos obtenidos de Github.
+5. **Modo de chat**: Ajuste la variable **`chat_type`** en **`config.yaml`** a **`qa_chat`** para una interacción en modo de preguntas y respuestas, o a **`memory_chat`** para un chat con memoria. En el modo de preguntas y respuestas, el chatbot genera respuestas basándose puramente en la consulta actual sin considerar el historial de la conversación. En el modo de chat con memoria, el chatbot puede recordar partes de la conversación para generar respuestas más contextualizadas.
+6. **Interacción con los documentos**: Al ejecutar **`hashira/conversation_ai.py`**, podrás chatear con todos los documentos obtenidos de Github.
 
 ## Instalación de dependencias
 
