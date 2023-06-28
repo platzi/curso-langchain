@@ -1,9 +1,9 @@
 from typing import Dict, List
 
-from langchain.chains import ConversationChain, RetrievalQA
+from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import CohereEmbeddings, OpenAIEmbeddings
-from langchain.memory import VectorStoreRetrieverMemory
+from langchain.memory import ConversationBufferMemory
 from langchain.prompts.prompt import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
@@ -126,18 +126,28 @@ def process_conversation_query(query: str, retriever, llm: ChatOpenAI) -> str:
     """
     config = load_config()
 
-    memory = VectorStoreRetrieverMemory(retriever=retriever)
+    # memory = VectorStoreRetrieverMemory(retriever=retriever)
 
-    conversation_with_summary = ConversationChain(
-        prompt=PROMPT_TEMPLATE_CHAT,
+    chat_history = []
+
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+    conversation = ConversationalRetrievalChain.from_llm(
         llm=llm,
+        retriever=retriever,
         memory=memory,
         verbose=config["conversation_chain"]["verbose"],
     )
 
     console.print("[yellow]La IA está pensando...[/yellow]")
 
-    return conversation_with_summary.predict(input=query)
+    result = conversation({"question": query, "chat_history": chat_history})
+
+    chat_history = [(query, result["answer"])] + chat_history
+
+    print(chat_history)
+
+    return result["answer"]
 
 
 def run_conversation(vectorstore, chat_type):
