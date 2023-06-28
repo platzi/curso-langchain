@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from langchain.chains import ConversationChain
+from langchain.chains import ConversationChain, RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import CohereEmbeddings, OpenAIEmbeddings
 from langchain.memory import VectorStoreRetrieverMemory
@@ -42,6 +42,7 @@ def load_documents(file_path: str) -> List[Dict]:
     )
 
     return text_splitter.split_documents(data)
+
 
 # TODO: Implementar uso de embeddings de Cohere.
 def select_embedding_provider(provider: str, model: str):
@@ -92,28 +93,40 @@ def get_chroma_db(embeddings, documents, path):
         return Chroma(persist_directory=path, embedding_function=embeddings)
 
 
-def process_query(query: str, vectorstore) -> str:
+def process_qa_query(query: str, retriever, llm) -> str:
     """
     Procesa una consulta del usuario y genera una respuesta del chatbot.
 
     Args:
         query (str): La consulta del usuario.
-        vectorstore: La base de datos de vectores donde buscar la respuesta.
+        retriever: El objeto encargado de recuperar los documentos.
+        llm: El modelo de lenguaje de gran tamaño a usar.
+
+    Returns:
+        La respuesta generada por el chatbot.
+    """
+    qa_chain = RetrievalQA.from_chain_type(
+        llm=llm, chain_type="stuff", retriever=retriever
+    )
+    console.print("[yellow]La IA está pensando...[/yellow]")
+    return qa_chain.run(query)
+
+
+def process_conversation_query(query: str, retriever, llm: ChatOpenAI) -> str:
+    """
+    Procesa una consulta del usuario y genera una respuesta del chatbot en modo de conversación.
+
+    Args:
+        query (str): La consulta del usuario.
+        retriever: El objeto de recuperación de datos donde buscar la respuesta.
+        llm: El modelo de lenguaje de gran tamaño a usar.
 
     Returns:
         La respuesta generada por el chatbot.
     """
     config = load_config()
-    retriever = vectorstore.as_retriever(
-        search_kwargs={"k": config["document_retrieval"]["k"]}
-    )
-    memory = VectorStoreRetrieverMemory(retriever=retriever)
 
-    llm = ChatOpenAI(
-        model_name=config["chat_model"]["model_name"],
-        temperature=config["chat_model"]["temperature"],
-        max_tokens=config["chat_model"]["max_tokens"],
-    )
+    memory = VectorStoreRetrieverMemory(retriever=retriever)
 
     conversation_with_summary = ConversationChain(
         prompt=PROMPT_TEMPLATE_CHAT,
@@ -127,17 +140,37 @@ def process_query(query: str, vectorstore) -> str:
     return conversation_with_summary.predict(input=query)
 
 
-def run_conversation(vectorstore_chroma):
+def run_conversation(vectorstore, chat_type):
     """
     Inicia una conversación con el usuario.
 
     Args:
-        vectorstore_chroma: La base de datos de vectores donde buscar las respuestas.
+        vectorstore: La base de datos de vectores donde buscar las respuestas.
+        chat_type: El tipo de chat a usar.
     """
-    conversation_history = []
+    config = load_config()
 
     console.print(
         "\n[blue]IA:[/blue] Hola 🚀! Qué quieres preguntarme sobre Transformers e inteligencia artificial en general?"
+    )
+
+    if chat_type == "memory_chat":
+        console.print(
+            "\n[green]Estás utilizando el chatbot en modo de conversación. Recuerda que este chatbot puede recordar partes de la conversación para generar respuestas más contextualizadas.[/green]"
+        )
+    elif chat_type == "qa_chat":
+        console.print(
+            "\n[green]Estás utilizando el chatbot en modo de preguntas y respuestas. Este chatbot genera respuestas basándose puramente en la consulta actual sin considerar el historial de la conversación.[/green]"
+        )
+
+    retriever = vectorstore.as_retriever(
+        search_kwargs={"k": config["document_retrieval"]["k"]}
+    )
+
+    llm = ChatOpenAI(
+        model_name=config["chat_model"]["model_name"],
+        temperature=config["chat_model"]["temperature"],
+        max_tokens=config["chat_model"]["max_tokens"],
     )
 
     while True:
@@ -147,13 +180,14 @@ def run_conversation(vectorstore_chroma):
         if query.lower() == "salir":
             break
 
-        conversation_history.append({"role": "system", "content": f"User: {query}"})
-
-        response = process_query(query=query, vectorstore=vectorstore_chroma)
+        if chat_type == "memory_chat":
+            response = process_conversation_query(
+                query=query, retriever=retriever, llm=llm
+            )
+        elif chat_type == "qa_chat":
+            response = process_qa_query(query=query, retriever=retriever, llm=llm)
 
         console.print(f"[red]IA:[/red] {response}")
-
-        conversation_history.append({"role": "system", "content": f"AI: {response}"})
 
 
 def main():
@@ -172,7 +206,13 @@ def main():
 
     console.print(f"[green]Documentos {len(documents)} cargados.[/green]")
 
-    run_conversation(vectorstore_chroma)
+    llm = ChatOpenAI(
+        model_name=config["chat_model"]["model_name"],
+        temperature=config["chat_model"]["temperature"],
+        max_tokens=config["chat_model"]["max_tokens"],
+    )
+
+    run_conversation(vectorstore_chroma, config["chat_type"])
 
 
 if __name__ == "__main__":
