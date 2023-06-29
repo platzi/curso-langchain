@@ -127,7 +127,7 @@ def process_conversation_query(
     )
 
     console.print("[yellow]La IA está pensando...[/yellow]")
-    print(f"La historia antes de este query: {chat_history}")
+    # print(f"La historia antes de este query: {chat_history}")
     result = conversation({"question": query, "chat_history": chat_history})
     chat_history.append((query, result["answer"]))
 
