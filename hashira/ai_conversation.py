@@ -3,7 +3,6 @@ from typing import Dict, List
 from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import CohereEmbeddings, OpenAIEmbeddings
-from langchain.prompts.prompt import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from rich.console import Console
@@ -11,14 +10,6 @@ from utils import (DocsJSONLLoader, get_cohere_api_key, get_file_path,
                    get_openai_api_key, get_query_from_user, load_config)
 
 console = Console()
-
-with open("hashira/prompt_ai_conversation.txt", "r") as file:
-    PROMPT = file.read()
-
-PROMPT_TEMPLATE_CHAT = PromptTemplate(
-    input_variables=["chat_history", "question"], template=PROMPT
-)
-
 
 def load_documents(file_path: str) -> List[Dict]:
     """
