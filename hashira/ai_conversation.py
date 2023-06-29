@@ -11,6 +11,7 @@ from utils import (DocsJSONLLoader, get_cohere_api_key, get_file_path,
 
 console = Console()
 
+
 def load_documents(file_path: str) -> List[Dict]:
     """
     Carga los documentos desde un archivo JSONL y los divide en trozos.
@@ -102,7 +103,9 @@ def process_qa_query(query: str, retriever, llm) -> str:
     return qa_chain.run(query)
 
 
-def process_conversation_query(query: str, retriever, llm: ChatOpenAI, chat_history: List) -> str:
+def process_conversation_query(
+    query: str, retriever, llm: ChatOpenAI, chat_history: List
+) -> str:
     """
     Procesa una consulta del usuario y genera una respuesta del chatbot en modo de conversación.
 
@@ -127,7 +130,6 @@ def process_conversation_query(query: str, retriever, llm: ChatOpenAI, chat_hist
     print(f"La historia antes de este query: {chat_history}")
     result = conversation({"question": query, "chat_history": chat_history})
     chat_history.append((query, result["answer"]))
-
 
     return result["answer"]
 
