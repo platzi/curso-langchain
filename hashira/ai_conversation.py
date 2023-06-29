@@ -150,7 +150,7 @@ def process_conversation_query(query: str, retriever, llm: ChatOpenAI) -> str:
     return result["answer"]
 
 
-def run_conversation(vectorstore, chat_type):
+def run_conversation(vectorstore, chat_type, llm):
     """
     Inicia una conversación con el usuario.
 
@@ -175,12 +175,6 @@ def run_conversation(vectorstore, chat_type):
 
     retriever = vectorstore.as_retriever(
         search_kwargs={"k": config["document_retrieval"]["k"]}
-    )
-
-    llm = ChatOpenAI(
-        model_name=config["chat_model"]["model_name"],
-        temperature=config["chat_model"]["temperature"],
-        max_tokens=config["chat_model"]["max_tokens"],
     )
 
     while True:
@@ -222,7 +216,7 @@ def main():
         max_tokens=config["chat_model"]["max_tokens"],
     )
 
-    run_conversation(vectorstore_chroma, config["chat_type"])
+    run_conversation(vectorstore_chroma, config["chat_type"], llm)
 
 
 if __name__ == "__main__":
