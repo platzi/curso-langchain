@@ -20,7 +20,7 @@ github:
       repo: accelerate
       path: docs/source
 
-jsonl_database_path: data/docs_en_2023_06_24.jsonl
+jsonl_database_path: data/docs_en_2023_06_28.jsonl
 
 # =================================================
 # Configuración para ai_conversation.py
@@ -45,4 +45,4 @@ document_retrieval:
   k: 5
 
 conversation_chain:
-  verbose: true
+  verbose: false

@@ -3,7 +3,6 @@ from typing import Dict, List
 from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import CohereEmbeddings, OpenAIEmbeddings
-from langchain.memory import ConversationBufferMemory
 from langchain.prompts.prompt import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
@@ -17,7 +16,7 @@ with open("hashira/prompt_ai_conversation.txt", "r") as file:
     PROMPT = file.read()
 
 PROMPT_TEMPLATE_CHAT = PromptTemplate(
-    input_variables=["history", "input"], template=PROMPT
+    input_variables=["chat_history", "question"], template=PROMPT
 )
 
 
@@ -112,7 +111,7 @@ def process_qa_query(query: str, retriever, llm) -> str:
     return qa_chain.run(query)
 
 
-def process_conversation_query(query: str, retriever, llm: ChatOpenAI) -> str:
+def process_conversation_query(query: str, retriever, llm: ChatOpenAI, chat_history: List) -> str:
     """
     Procesa una consulta del usuario y genera una respuesta del chatbot en modo de conversación.
 
@@ -120,32 +119,24 @@ def process_conversation_query(query: str, retriever, llm: ChatOpenAI) -> str:
         query (str): La consulta del usuario.
         retriever: El objeto de recuperación de datos donde buscar la respuesta.
         llm: El modelo de lenguaje de gran tamaño a usar.
+        chat_history: The list of previous question-answer pairs in the conversation.
 
     Returns:
         La respuesta generada por el chatbot.
     """
     config = load_config()
 
-    # memory = VectorStoreRetrieverMemory(retriever=retriever)
-
-    chat_history = []
-
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-
     conversation = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=retriever,
-        memory=memory,
         verbose=config["conversation_chain"]["verbose"],
     )
 
     console.print("[yellow]La IA está pensando...[/yellow]")
-
+    print(f"La historia antes de este query: {chat_history}")
     result = conversation({"question": query, "chat_history": chat_history})
+    chat_history.append((query, result["answer"]))
 
-    chat_history = [(query, result["answer"])] + chat_history
-
-    print(chat_history)
 
     return result["answer"]
 
@@ -163,6 +154,8 @@ def run_conversation(vectorstore, chat_type, llm):
     console.print(
         "\n[blue]IA:[/blue] Hola 🚀! Qué quieres preguntarme sobre Transformers e inteligencia artificial en general?"
     )
+
+    chat_history = []
 
     if chat_type == "memory_chat":
         console.print(
@@ -186,7 +179,7 @@ def run_conversation(vectorstore, chat_type, llm):
 
         if chat_type == "memory_chat":
             response = process_conversation_query(
-                query=query, retriever=retriever, llm=llm
+                query=query, retriever=retriever, llm=llm, chat_history=chat_history
             )
         elif chat_type == "qa_chat":
             response = process_qa_query(query=query, retriever=retriever, llm=llm)
