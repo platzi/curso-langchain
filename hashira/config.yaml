@@ -21,28 +21,3 @@ github:
       path: docs/source
 
 jsonl_database_path: data/docs_en_2023_06_28.jsonl
-
-# =================================================
-# Configuración para ai_conversation.py
-# =================================================
-
-recreate_chroma_db: false
-chat_type: memory_chat # Puede ser qa_chat para preguntas y memory_chat para un chat con memoria
-embeddings_provider: openai # puede ser "cohere"
-embeddings_model: text-embedding-ada-002 # con cohere puede ser "embed-multilingual-v2.0"
-chroma_db_name: chroma_docs
-
-chat_model:
-  model_name: gpt-3.5-turbo
-  temperature: 0.9
-  max_tokens: 1000
-
-text_splitting:
-  chunk_size: 1600
-  chunk_overlap: 50
-
-document_retrieval:
-  k: 5
-
-conversation_chain:
-  verbose: false
