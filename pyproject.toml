@@ -6,7 +6,7 @@ authors = ["Omar U. Espejel <espejelomar@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 requests = "^2.30.0"
 pyyaml = "^6.0"
 termcolor = "^2.3.0"
